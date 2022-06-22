@@ -1,3 +1,4 @@
 import {makePosts} from './data.js';
+import {renderThumbnails} from './thumbnail.js';
 
-console.log(makePosts());
+renderThumbnails(makePosts());
