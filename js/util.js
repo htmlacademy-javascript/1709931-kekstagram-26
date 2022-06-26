@@ -8,7 +8,8 @@ const getRandomInteger = (min, max) => {
 const checkStringLength = (string, maxLength) => string.length <= maxLength;
 checkStringLength('aaaa', 1);
 
-// Функция, которая генерирует массив с неповторяющимися числами
 const getId = (items) => items.splice(getRandomInteger(0, items.length - 1), 1)[0];
 
-export {getId, getRandomInteger};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getId, getRandomInteger, isEscapeKey};
