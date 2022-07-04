@@ -1,4 +1,4 @@
-const scaleRange = {
+const ScaleRange = {
   MIN: 25,
   STEP: 25,
   DEFAULT: 100
@@ -8,15 +8,19 @@ const scaleBigger = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
 const photoPreview = document.querySelector('.img-upload__preview');
 
-// Начальное значение - 100. Если закрыть окно и загрузить новую фотку - начальный масштаб изменяется на значение 55%
-scaleValue.value = `${scaleRange.DEFAULT}%`;
+// Функция сброса на начальное значение - 100%
+const initScaleValue = () => {
+  scaleValue.value = `${ScaleRange.DEFAULT}%`;
+  photoPreview.style.transform = '';
+  photoPreview.style.transform = `scale(${ScaleRange.DEFAULT} / 100)`;
+};
 
 // Обработчик, уменьшающий масштаб
-const onScaleReduce = () => {
+const onScaleDecrease = () => {
   let scope = parseInt(scaleValue.value, 10);
 
-  if (scope > scaleRange.MIN) {
-    scope -= scaleRange.STEP;
+  if (scope > ScaleRange.MIN) {
+    scope -= ScaleRange.STEP;
     scaleValue.value = `${scope}%`;
     photoPreview.style.transform = `scale(${scope / 100})`;
   }
@@ -26,16 +30,16 @@ const onScaleReduce = () => {
 const onScaleIncrease = () => {
   let scope = parseInt(scaleValue.value, 10);
 
-  if (scope < scaleRange.DEFAULT) {
-    scope += scaleRange.STEP;
+  if (scope < ScaleRange.DEFAULT) {
+    scope += ScaleRange.STEP;
     scaleValue.value = `${scope}%`;
     photoPreview.style.transform = `scale(${scope / 100})`;
   }
 };
 
 const changePhotoScale = () => {
-  scaleSmaller.addEventListener ('click', onScaleReduce);
-  scaleBigger.addEventListener ('click', onScaleIncrease);
+  scaleSmaller.addEventListener('click', onScaleDecrease);
+  scaleBigger.addEventListener('click', onScaleIncrease);
 };
 
-export {changePhotoScale};
+export {changePhotoScale, initScaleValue};
