@@ -42,7 +42,7 @@ pristine.addValidator(hashtag, validateUniqueHashtags, MessagesHashtagsError.IDE
 pristine.addValidator(hashtag, validateHashtagsCounts, MessagesHashtagsError.PLENTY);
 
 form.addEventListener('submit', (evt) => {
-  // evt.preventDefault();
+  evt.preventDefault();
   pristine.validate();
 });
 
