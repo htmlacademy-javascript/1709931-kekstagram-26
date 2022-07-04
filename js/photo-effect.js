@@ -1,3 +1,4 @@
+const effectLevelContainer = document.querySelector('.effect-level');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const uploadedPhoto = document.querySelector('.img-upload__preview img');
@@ -77,29 +78,43 @@ noUiSlider.create(effectLevelSlider, {
   connect: 'lower',
 });
 
-const onFilterChange = (evt) => {
-  if (evt.target.matches('input[type="radio"]')) {
+// Функция сброса начальных значений при загрузке фото
+const resetEffect = () => {
+  effectLevelValue.value = '';
+  uploadedPhoto.className = '';
+  uploadedPhoto.style.filter = '';
+  effectLevelContainer.classList.add('hidden');
+  effectLevelSlider.setAttribute('disabled', true);
+};
 
-    if (evt.target.value === 'none') {
-      effectLevelSlider.noUiSlider.destroy();
-      effectLevelSlider.classList.add = 'hidden';
+// Обработчик для изменения эффекта
+const onEffectChange = (evt) => {
+  if (evt.target.matches('input[type="radio"]')) {
+    const currentValue = evt.target.value;
+    if (currentValue === 'none') {
+      resetEffect();
+      return;
     }
 
-    // uploadedPhoto.className = '';
-    // uploadedPhoto.style.filter = '';
-    // effectLevelSlider.classList.remove = 'hidden';
-    uploadedPhoto.classList.add(`effects__preview--${evt.target.value}`); //evt.target.value = chrome, sepia и т.д.
+    effectLevelContainer.classList.remove('hidden');
+    effectLevelSlider.removeAttribute('disabled', true);
+    uploadedPhoto.classList.add(`effects__preview--${currentValue}`); //evt.target.value = chrome, sepia и т.д.
 
     // Обновление параметров слайдера noUiSlider
-    effectLevelSlider.noUiSlider.updateOptions(effects[evt.target.value].options);
+    effectLevelSlider.noUiSlider.updateOptions(effects[currentValue].options);
 
     // Связывание слайдера с фильтром
     effectLevelSlider.noUiSlider.on('update', () => {
       effectLevelValue.value = effectLevelSlider.noUiSlider.get();
 
-      uploadedPhoto.style.filter = `${effects[evt.target.value].filter}(${effectLevelValue.value}${effects[evt.target.value].units}`; // Расшифровка: uploadedPhoto.style.filter = effects[phobos].blur(0...3)px
+      const {filter, units} = effects[currentValue];
+      uploadedPhoto.style.filter = `${filter}(${effectLevelValue.value}${units}`; // Расшифровка: uploadedPhoto.style.filter = effects[phobos].blur(0...3)px
     });
   }
 };
 
-effectsList.addEventListener('change', onFilterChange);
+const changeEffect = () => {
+  effectsList.addEventListener('change', onEffectChange);
+};
+
+export {resetEffect, changeEffect};
