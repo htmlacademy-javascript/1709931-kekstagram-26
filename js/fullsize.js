@@ -59,7 +59,7 @@ const renderFullSize = ({url, likes, comments, description}) => {
     commentsList.append(commentsFragment);
 
     // Сравнивает счетчик count с количеством комментариев, чтобы скрыть/отобразить кнопку загрузки комментариев и рассчитывает, сколько выведено комментариев
-    if(count >= comments.length) {
+    if (count >= comments.length) {
       commentsLoader.classList.add('hidden');
       commentsCount.textContent = `${comments.length} из ${comments.length} комментариев`;
     } else {
