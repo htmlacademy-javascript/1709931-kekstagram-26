@@ -17,7 +17,8 @@ uploadedFile.addEventListener('change', () => {
   initScaleValue(); // Сбрасывает масштаб фото на 100% при открытии
 });
 
-const closeUploadedImg = () => {
+// Закрытие модального окна с загруженным фото
+const closeUploadedPhoto = () => {
   uploadedPhoto.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onModalClose);
@@ -26,10 +27,12 @@ const closeUploadedImg = () => {
 
 function onModalClose(evt) {
   if (isEscapeKey(evt)) {
-    closeUploadedImg();
+    closeUploadedPhoto();
   }
 }
 
 closeButton.addEventListener('click', () => {
-  closeUploadedImg();
+  closeUploadedPhoto();
 });
+
+export {closeUploadedPhoto};

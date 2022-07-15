@@ -117,4 +117,6 @@ const changeEffect = () => {
   effectsList.addEventListener('change', onEffectChange);
 };
 
-export {resetEffect, changeEffect};
+changeEffect();
+
+export {resetEffect};

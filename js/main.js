@@ -1,10 +1,10 @@
-import {makePosts} from './data.js';
 import {renderThumbnails} from './thumbnail.js';
-import './form.js';
-import './form-validation.js';
-import {changePhotoScale} from './photo-scale.js';
-import {changeEffect} from './photo-effect.js';
+import {getData} from './api.js';
+import {setUserFormSubmit} from './form-validation.js';
+import {submitSuccessForm, submitErrorForm} from './form-messages.js';
 
-renderThumbnails(makePosts());
-changePhotoScale();
-changeEffect();
+// Получение данных с сервера
+getData(renderThumbnails);
+
+// Отправка данных из формы на сервер
+setUserFormSubmit(submitSuccessForm, submitErrorForm);

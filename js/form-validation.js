@@ -1,4 +1,5 @@
 import {isEscapeKey} from './util.js';
+import {sendData} from './api.js';
 
 const MAX_HASHTAGS_COUNT = 5;
 
@@ -11,7 +12,9 @@ const MessagesHashtagsError = {
 const form = document.querySelector('.img-upload__form');
 const hashtag = form.querySelector('.text__hashtags');
 const description = form.querySelector('.text__description');
+const submitButton = document.querySelector('.img-upload__submit');
 
+// Валидация Pristine
 const pristine = new Pristine(form, {
   classTo: 'img-upload__form', // Куда добавляем класс от pristine
   errorTextParent: 'img-upload__field-wrapper', // Обертка, куда вставляется текст с ошибкой
@@ -36,15 +39,44 @@ const validateHashtagsCounts = (value) => {
   return arrayHashtags.length <= MAX_HASHTAGS_COUNT;
 };
 
-// Валидация Pristine
 pristine.addValidator(hashtag, validateHashtags, MessagesHashtagsError.INVALID);
 pristine.addValidator(hashtag, validateUniqueHashtags, MessagesHashtagsError.IDENTICAL);
 pristine.addValidator(hashtag, validateHashtagsCounts, MessagesHashtagsError.PLENTY);
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+// Функция блокировки кнопки отправить
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую';
+};
+
+// Функция разблокировки кнопки отправить
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+// Отправка данных из формы на сервер
+const setUserFormSubmit = (onSuccess, onFail) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData (
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          onFail();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
 
 const onFocusInputEsc = (evt) => {
   if (isEscapeKey(evt)) {
@@ -54,3 +86,5 @@ const onFocusInputEsc = (evt) => {
 
 hashtag.addEventListener('keydown', onFocusInputEsc);
 description.addEventListener('keydown', onFocusInputEsc);
+
+export {setUserFormSubmit};

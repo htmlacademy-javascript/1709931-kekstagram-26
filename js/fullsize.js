@@ -34,6 +34,7 @@ function onModalClose(evt) {
   }
 }
 
+// Рендеринг полноразмерной фото
 const renderFullSize = ({url, likes, comments, description}) => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
