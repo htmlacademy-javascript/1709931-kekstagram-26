@@ -2,6 +2,7 @@ import {renderThumbnails} from './thumbnail.js';
 import {debounce} from './util.js';
 
 const POSTS_NUMBER = 10;
+const RERENDER_DELAY = 500;
 
 const defaultFilterButton = document.querySelector('#filter-default');
 const randomFilterButton = document.querySelector('#filter-random');
@@ -36,7 +37,7 @@ const updatePhotos = (posts) => {
 };
 
 // Устранение дребезжания
-const debouncedFilter = debounce(updatePhotos);
+const debouncedFilter = debounce(updatePhotos, RERENDER_DELAY);
 
 // Фильтр для сортировки
 const createFilters = (posts) => {

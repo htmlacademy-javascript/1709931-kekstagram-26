@@ -1,19 +1,21 @@
-import {showAlert} from './util.js';
-
 const Urls = {
   GET: 'https://26.javascript.pages.academy/kekstagram/data',
   POST: 'https://26.javascript.pages.academy/kekstagram'
 };
 
 // Получение данных с сервера
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch(Urls.GET)
-    .then((response) => response.ok? response.json() : showAlert('Не удалось получить изображения. Перезагрузите страницу'))
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } throw new Error (onFail('Не удалось получить изображения. Обновите страницу'));
+    })
     .then((data) => {
       onSuccess(data);
     })
     .catch(() => {
-      showAlert('Не удалось получить изображения. Перезагрузите страницу');
+      onFail('Не удалось получить изображения. Обновите страницу');
     });
 };
 

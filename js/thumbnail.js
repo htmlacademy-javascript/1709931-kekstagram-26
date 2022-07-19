@@ -12,7 +12,6 @@ const renderThumbnails = (photos) => {
     photoElement.querySelector('.picture__comments').textContent = comments.length;
     photoElement.addEventListener('click', () => renderFullSize(photo));
     photoListFragment.append(photoElement);
-    console.log(photo);
   });
 
   photoContainer.append(photoListFragment);
