@@ -1,7 +1,7 @@
-import {renderThumbnails} from './thumbnail.js';
+import {renderThumbnails} from './photo-thumbnail.js';
 import {debounce} from './util.js';
 
-const POSTS_NUMBER = 10;
+const POST_NUMBERS = 10;
 const RERENDER_DELAY = 500;
 
 const defaultFilterButton = document.querySelector('#filter-default');
@@ -19,7 +19,7 @@ const getActiveButton = (currentButton) => {
 const getDefaultPosts = (posts) => posts.slice();
 
 // 10 случайных фотографий
-const getRandomPosts = (posts) => posts.slice().sort(() => 0.5 - Math.random()).slice(0, POSTS_NUMBER);
+const getRandomPosts = (posts) => posts.slice().sort(() => 0.5 - Math.random()).slice(0, POST_NUMBERS);
 
 // Сортировка в порядке убывания количества комментариев
 const getDisscussedPosts = (posts) => posts.slice().sort((post1, post2) => post2.comments.length - post1.comments.length);

@@ -108,7 +108,7 @@ const onEffectChange = (evt) => {
       effectLevelValue.value = effectLevelSlider.noUiSlider.get();
 
       const {filter, units} = effects[currentValue];
-      uploadedPhoto.style.filter = `${filter}(${effectLevelValue.value}${units}`; // Расшифровка: uploadedPhoto.style.filter = effects[phobos].blur(0...3)px
+      uploadedPhoto.style.filter = `${filter}(${effectLevelValue.value}${units}`; // uploadedPhoto.style.filter = effects[phobos].blur(0...3)px
     });
   }
 };
