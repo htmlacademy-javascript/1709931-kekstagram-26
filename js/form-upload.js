@@ -26,7 +26,7 @@ const closeUploadedPhoto = () => {
 };
 
 function onModalClose(evt) {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt) && !body.contains(document.querySelector('.error'))) {
     closeUploadedPhoto();
   }
 }

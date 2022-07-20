@@ -22,7 +22,6 @@ const showErrorMessage = () => {
 
 // Функция закрытия сообщения об ошибке
 const closeErrorMessage = () => {
-  body.classList.remove('modal-open');
   errorMessageElement.remove();
   document.removeEventListener('keydown', onErrorMessageEscClose);
   document.removeEventListener('click', onErrorMessageClickClose);
