@@ -4,10 +4,8 @@ import {debounce} from './util.js';
 const POST_NUMBERS = 10;
 const RERENDER_DELAY = 500;
 
-const defaultFilterButton = document.querySelector('#filter-default');
-const randomFilterButton = document.querySelector('#filter-random');
-const discussedFilterButton = document.querySelector('#filter-discussed');
 const photoFilter = document.querySelector('.img-filters');
+const filterButtons = photoFilter.querySelectorAll('button');
 
 // Добавляем класс активной кнопке
 const getActiveButton = (currentButton) => {
@@ -15,14 +13,12 @@ const getActiveButton = (currentButton) => {
   currentButton.classList.add('img-filters__button--active');
 };
 
-// Фотографии в изначальном порядке
-const getDefaultPosts = (posts) => posts.slice();
-
-// 10 случайных фотографий
-const getRandomPosts = (posts) => posts.slice().sort(() => 0.5 - Math.random()).slice(0, POST_NUMBERS);
-
-// Сортировка в порядке убывания количества комментариев
-const getDisscussedPosts = (posts) => posts.slice().sort((post1, post2) => post2.comments.length - post1.comments.length);
+// Связываем id кнопки с функцией
+const FiltersFunctions = {
+  'filter-default': (posts) => posts.slice(), // Фотографии в изначальном порядке
+  'filter-random': (posts) => posts.slice().sort(() => 0.5 - Math.random()).slice(0, POST_NUMBERS), // 10 случайных фотографий
+  'filter-discussed': (posts) => posts.slice().sort((post1, post2) => post2.comments.length - post1.comments.length) // Сортировка в порядке убывания количества комментариев
+};
 
 // Удаление отрисованных фотографий
 const clearPhotos = () => {
@@ -30,32 +26,23 @@ const clearPhotos = () => {
   postsList.forEach((photo) => photo.remove());
 };
 
-// Обновление фотографий
-const updatePhotos = (posts) => {
-  clearPhotos();
-  renderThumbnails(posts);
-};
-
 // Устранение дребезжания
-const debouncedFilter = debounce(updatePhotos, RERENDER_DELAY);
+const debouncedFilter = debounce((id, posts) => {
+  clearPhotos();
+  renderThumbnails(FiltersFunctions[id](posts));
+}, RERENDER_DELAY);
 
 // Фильтр для сортировки
 const createFilters = (posts) => {
   photoFilter.classList.remove('img-filters--inactive');
 
-  defaultFilterButton.addEventListener('click', (evt) => {
+  const onFilterButtonClick = (evt) => {
     getActiveButton(evt.target);
-    debouncedFilter(getDefaultPosts(posts));
-  });
+    debouncedFilter(evt.target.id, posts);
+  };
 
-  randomFilterButton.addEventListener('click', (evt) => {
-    getActiveButton(evt.target);
-    debouncedFilter(getRandomPosts(posts));
-  });
-
-  discussedFilterButton.addEventListener('click', (evt) => {
-    getActiveButton(evt.target);
-    debouncedFilter(getDisscussedPosts(posts));
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', onFilterButtonClick);
   });
 };
 
