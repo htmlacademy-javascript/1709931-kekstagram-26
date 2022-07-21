@@ -9,30 +9,35 @@ const uploadedPhoto = form.querySelector('.img-upload__overlay');
 const closeButton = form.querySelector('#upload-cancel');
 
 // Загрузка фото
-uploadedFile.addEventListener('change', () => {
+const onPhotoUpload = () => {
   uploadedPhoto.classList.remove('hidden');
   body.classList.add('modal-open');
-  document.addEventListener('keydown', onModalClose);
+  document.addEventListener('keydown', onModalEscClose);
   resetEffect(); // Сбрасывает фильтры на начальном фото
   initScaleValue(); // Сбрасывает масштаб фото на 100% при открытии
-});
+};
+
+uploadedFile.addEventListener('change', onPhotoUpload);
 
 // Закрытие модального окна с загруженным фото
 const closeUploadedPhoto = () => {
   uploadedPhoto.classList.add('hidden');
   body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onModalClose);
+  document.removeEventListener('keydown', onModalEscClose);
   form.reset();
 };
 
-function onModalClose(evt) {
+function onModalEscClose(evt) {
   if (isEscapeKey(evt) && !body.contains(document.querySelector('.error'))) {
     closeUploadedPhoto();
   }
 }
 
-closeButton.addEventListener('click', () => {
+// Закрытие модального окна по кнопке
+const onModalButtonClose = () => {
   closeUploadedPhoto();
-});
+};
+
+closeButton.addEventListener('click', onModalButtonClose);
 
 export {closeUploadedPhoto};

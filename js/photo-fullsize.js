@@ -16,26 +16,20 @@ const commentsFragment = document.createDocumentFragment();
 const commentsCount = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.social__comments-loader');
 
-// Закрытие модального окна
-const closePhoto = () => {
-  bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onModalClose);
-  commentsLoader.onclick = null;
+// Рендеринг комментария
+const renderComment = ({avatar, name, message}) => {
+  const commentElement = commentsItem.cloneNode(true);
+  const commentElementAvatar = commentElement.querySelector('.social__picture');
+  commentElementAvatar.src = avatar;
+  commentElementAvatar.alt = name;
+  const commentElementText = commentElement.querySelector('.social__text');
+  commentElementText.textContent = message;
+  commentsFragment.append(commentElement);
 };
 
-closeButton.addEventListener('click', () => {
-  closePhoto();
-});
-
-function onModalClose(evt) {
-  if (isEscapeKey(evt)) {
-    closePhoto();
-  }
-}
-
 // Рендеринг полноразмерной фото
-const renderFullSize = ({url, likes, comments, description}) => {
+const renderFullSize = (photo) => {
+  const {url, likes, comments, description} = photo;
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
 
@@ -46,16 +40,9 @@ const renderFullSize = ({url, likes, comments, description}) => {
   // Функция создания комментариев - массивом по 5 штук
   let count = 0; // Переменная для отображения порций комментариев - 5шт, 10шт и т.д.
   const addComments = () => {
-    comments.slice(0, count += MAX_COMMENTS_TO_SHOW).forEach(({avatar, name, message}) => {
-      const commentElement = commentsItem.cloneNode(true);
-      const commentElementAvatar = commentElement.querySelector('.social__picture');
-      commentElementAvatar.src = avatar;
-      commentElementAvatar.alt = name;
-      const commentElementText = commentElement.querySelector('.social__text');
-      commentElementText.textContent = message;
-      commentsFragment.append(commentElement);
-    });
+    count += MAX_COMMENTS_TO_SHOW;
 
+    comments.slice(0, count).forEach((comment) => renderComment(comment));
     commentsList.innerHTML = ''; // Очищаем список комментариев
     commentsList.append(commentsFragment);
 
@@ -69,14 +56,34 @@ const renderFullSize = ({url, likes, comments, description}) => {
     }
   };
 
-  addComments(); // Вызываем функцию, чтобы отобразились первые 5 комментариев
+  addComments();
 
-  // Листенер на кнопку для отображения остальных комментариев. Onclick использован, чтобы удалить обработчик при закрытии модального окна
-  commentsLoader.onclick = () => {
+  const onCommentsLoaderClick = () => {
     addComments();
   };
 
-  document.addEventListener('keydown', onModalClose);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
+  document.addEventListener('keydown', onModalEscClose);
+
+  // Закрытие модального окна
+  const closePhoto = () => {
+    bigPicture.classList.add('hidden');
+    body.classList.remove('modal-open');
+    document.removeEventListener('keydown', onModalEscClose);
+    commentsLoader.removeEventListener('click', onCommentsLoaderClick);
+  };
+
+  const onModalButtonClose = () => {
+    closePhoto();
+  };
+
+  closeButton.addEventListener('click', onModalButtonClose);
+
+  function onModalEscClose(evt) {
+    if (isEscapeKey(evt)) {
+      closePhoto();
+    }
+  }
 };
 
 export {renderFullSize};

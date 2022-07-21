@@ -43,39 +43,34 @@ pristine.addValidator(hashtag, validateHashtags, MessagesHashtagsError.INVALID);
 pristine.addValidator(hashtag, validateUniqueHashtags, MessagesHashtagsError.IDENTICAL);
 pristine.addValidator(hashtag, validateHashtagsCounts, MessagesHashtagsError.PLENTY);
 
-// Функция блокировки кнопки отправить
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = 'Публикую';
-};
-
-// Функция разблокировки кнопки отправить
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = 'Опубликовать';
+const changeSubmitButtonState = (disabled) => {
+  submitButton.disabled = disabled;
+  submitButton.textContent = disabled? 'Публикую' : 'Опубликовать';
 };
 
 // Отправка данных из формы на сервер
 const setUserFormSubmit = (onSuccess, onFail) => {
-  form.addEventListener('submit', (evt) => {
+  const onFormSubmit = (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
-      blockSubmitButton();
+      changeSubmitButtonState(true);
       sendData (
         () => {
           onSuccess();
-          unblockSubmitButton();
+          changeSubmitButtonState(false);
         },
         () => {
           onFail();
-          unblockSubmitButton();
+          changeSubmitButtonState(false);
         },
         new FormData(evt.target),
       );
     }
-  });
+  };
+
+  form.addEventListener('submit', onFormSubmit);
 };
 
 const onFocusInputEsc = (evt) => {

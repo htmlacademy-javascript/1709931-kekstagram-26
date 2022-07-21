@@ -28,7 +28,11 @@ const closeErrorMessage = () => {
 };
 
 // Закрытие сообщения об ошибке по кнопке
-errorButton.addEventListener('click', () => closeErrorMessage());
+const onErrorMessageButtonClose = () => {
+  closeErrorMessage();
+};
+
+errorButton.addEventListener('click', onErrorMessageButtonClose);
 
 // Обработчики для закрытия сообщения об успешной отправке
 function onErrorMessageEscClose(evt) {
@@ -62,7 +66,11 @@ const closeSuccessMessage = () => {
 };
 
 // Закрытие сообщения об успехе по кнопке
-successButton.addEventListener('click', () => closeSuccessMessage());
+const onSuccessMessageButtonClose = () => {
+  closeSuccessMessage();
+};
+
+successButton.addEventListener('click', onSuccessMessageButtonClose);
 
 // Обработчики для закрытия сообщения об успешной отправке
 function onSuccessMessageEscClose(evt) {

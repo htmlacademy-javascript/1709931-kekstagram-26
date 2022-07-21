@@ -7,11 +7,6 @@ const getRandomInteger = (min, max) => {
   return 0;
 };
 
-const checkStringLength = (string, maxLength) => string.length <= maxLength;
-checkStringLength('aaaa', 1);
-
-const getId = (items) => items.splice(getRandomInteger(0, items.length - 1), 1)[0];
-
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const showAlert = (message) => {
@@ -44,4 +39,4 @@ function debounce (callback, timeoutDelay) {
   };
 }
 
-export {getId, getRandomInteger, isEscapeKey, showAlert, debounce};
+export {getRandomInteger, isEscapeKey, showAlert, debounce};
